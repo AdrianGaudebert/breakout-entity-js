@@ -1,0 +1,3 @@
+[submodule "vendor/entity-system-js"]
+	path = vendor/entity-system-js
+	url = https://github.com/AdrianGaudebert/entity-system-js.git
