@@ -38,17 +38,13 @@ require([
 
         // Loading of the processors.
         var processors = new ProcessorManager();
-        processors.addProcessor(new RenderingProcessor(manager, renderer, stage));
         processors.addProcessor(new PhysicsProcessor(manager));
+        processors.addProcessor(new RenderingProcessor(manager, renderer, stage));
 
         // Creation of the base entities.
         var ball = manager.createEntity(['Ball', 'Sprite']);
         var spriteData = manager.getEntityWithComponent(ball, 'Sprite');
-
-        var texture = PIXI.Texture.fromImage('img/ballBlue.png');
-        spriteData._sprite = new PIXI.Sprite(texture);
-        spriteData._sprite.anchor.x = 0.5;
-        spriteData._sprite.anchor.y = 0.5;
+        spriteData.source = 'img/ball.png';
 
         var ballData = manager.getEntityWithComponent(ball, 'Ball');
         ballData.x = 640 / 2;
@@ -67,9 +63,7 @@ require([
             wallData.y = walls[i].y;
             wallData.width = walls[i].width;
             wallData.height = walls[i].height;
-        };
-
-        stage.addChild(spriteData._sprite);
+        }
 
         // Main loop.
         requestAnimFrame(animate);
