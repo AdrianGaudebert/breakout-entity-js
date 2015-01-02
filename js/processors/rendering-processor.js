@@ -24,8 +24,8 @@ define([
 
             var posData = this.manager.getEntityWithComponent(id, 'BoundingBox');
 
-            this._sprites[id].x = posData.x;
-            this._sprites[id].y = posData.y;
+            this._sprites[id].x = Math.round(posData.x);
+            this._sprites[id].y = Math.round(posData.y);
         }
 
         this.renderer.render(this.stage);

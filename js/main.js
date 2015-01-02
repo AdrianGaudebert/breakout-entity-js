@@ -48,6 +48,10 @@ require([
         processors.addProcessor(new RenderingProcessor(manager, renderer, stage));
 
         // Creation of the base entities.
+        var background = manager.createEntity(['Sprite', 'BoundingBox']);
+        var backSpriteData = manager.getEntityWithComponent(background, 'Sprite');
+        backSpriteData.source = 'img/background.png';
+
         var ball = manager.createEntity(['Ball', 'Sprite', 'Moving', 'BoundingBox']);
         var spriteData = manager.getEntityWithComponent(ball, 'Sprite');
         spriteData.source = 'img/ball.png';

@@ -1,0 +1,24 @@
+body {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3.0em;
+    margin-bottom: 10px;
+}
+
+p, li {
+    margin: 10px 0;
+}
+
+footer {
+    text-align: left;
+    margin: auto;
+    width: 640px;
+}
+
+#fps {
+    text-align: right;
+}
