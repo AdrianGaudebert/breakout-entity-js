@@ -7,6 +7,7 @@ requirejs.config({
 
 require([
     'lib/pixi',
+    'lib/sat',
     'vendor/entity-system-js/entity-manager',
     'vendor/entity-system-js/processor-manager',
     'components/ball',
@@ -18,6 +19,7 @@ require([
     'processors/moving-processor'
 ], function (
     PIXI,
+    SAT,
     EntityManager,
     ProcessorManager,
     Ball,

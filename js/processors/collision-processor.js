@@ -1,44 +1,63 @@
-define(function () {
+requirejs.config({
+    baseUrl: 'js',
+    paths: {
+        'vendor': '../vendor'
+    },
+});
+
+define(['lib/sat'], function (SAT) {
     var CollisionsProcessor = function (manager) {
         this.manager = manager;
+        this._boxes = {};
     };
 
     CollisionsProcessor.prototype.update = function () {
         var movables = this.manager.getEntitiesWithComponent('Moving');
         var boundingBoxes = this.manager.getEntitiesWithComponent('BoundingBox');
         var element = null;
-        var boudingBoxElement = null;
+        var boundingBoxData = null;
         var areColliding = null;
-        var movingElement = null;
+        var movingElementData = null;
+        var satElement = null;
+        var collisionResponse = new SAT.Response();
+        var boudingBoxId = null;
 
-        for (var movable in movables) {
-            element = this.manager.getEntityWithComponent(movable, 'BoundingBox');
+        for (var movableId in movables) {
+            element = this.manager.getEntityWithComponent(movableId, 'BoundingBox');
+            satElement = new SAT.Box(new SAT.Vector(element.x,element.y), element.width, element.height).toPolygon();
 
-            for (var boudingBox in boundingBoxes) {
-                boudingBoxElement = this.manager.getEntityWithComponent(boudingBox, 'BoundingBox');
+            for (var boudingBoxId in boundingBoxes) {
+                boundingBoxData = this.manager.getEntityWithComponent(boudingBoxId, 'BoundingBox');
 
-                if (boudingBoxElement.__id !== element.__id) {
-                    areColliding = this.areColliding(element, boudingBoxElement);
+                if (boundingBoxData.__id !== element.__id) {
+
+                    if (!this._boxes[boundingBoxData.__id]) {
+                        this._boxes[boundingBoxData.__id] = new SAT.Box(
+                            new SAT.Vector(boundingBoxData.x, boundingBoxData.y),
+                            boundingBoxData.width, 
+                            boundingBoxData.height
+                        ).toPolygon();
+                    }
+
+                    var areColliding = SAT.testPolygonPolygon(satElement, this._boxes[boundingBoxData.__id], collisionResponse);
 
                     if (areColliding) {
-                        var movingElement = this.manager.getEntityWithComponent(movable, "Moving");
-                        movingElement.dy = movingElement.dy * -1;
-                        movingElement.dx = movingElement.dx * -1;
+                        movingElementData = this.manager.getEntityWithComponent(movableId, 'Moving');
+
+                        if (collisionResponse.overlapN.x !== 0) {
+                            debugger;
+                            movingElementData.dx = movingElementData.dx * collisionResponse.overlapN.x;
+                        }
+
+                        if (collisionResponse.overlapN.y !== 0) {
+                            movingElementData.dy = movingElementData.dy * collisionResponse.overlapN.y;
+                        }
+
+                        collisionResponse.clear();
                     }
                 }
             }
         }
-    };
-
-    CollisionsProcessor.prototype.areColliding = function(rect1, rect2) {
-        if (rect1.x < rect2.x + rect2.width &&
-           rect1.x + rect1.width > rect2.x &&
-           rect1.y < rect2.y + rect2.height &&
-           rect1.height + rect1.y > rect2.y) {
-                return true;
-        }
-
-        return false;
     };
 
     CollisionsProcessor.prototype.collisionsHandler = function () {
