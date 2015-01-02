@@ -26,7 +26,7 @@ require([
     Moving,
     RenderingProcessor,
     PhysicsProcessor,
-    collisionProcessor
+    CollisionProcessor
 ) {
     // Creation of the stage with PIXI.
     var stage = new PIXI.Stage(0x888888);
@@ -45,6 +45,7 @@ require([
         var processors = new ProcessorManager();
         processors.addProcessor(new PhysicsProcessor(manager));
         processors.addProcessor(new RenderingProcessor(manager, renderer, stage));
+        processors.addProcessor(new CollisionProcessor(manager));
 
         // Creation of the base entities.
         var ball = manager.createEntity(['Ball', 'Sprite', 'Moving', 'BoundingBox']);
