@@ -77,13 +77,28 @@ require([
             wallData.height = walls[i].height;
         }
 
+        // Timing of the game and FPS.
+        var lastFrame = +new Date();
+        var averageFrameTime = 0;
+
         // Main loop.
         requestAnimFrame(animate);
         function animate() {
-            requestAnimFrame(animate);
+            var now = +new Date();
+            var elapsedTime = now - lastFrame;
 
-            processors.update();
+            averageFrameTime += (elapsedTime - averageFrameTime) / 20;
+
+            lastFrame = now;
+
+            processors.update(elapsedTime);
+            requestAnimFrame(animate);
         }
+
+        var fpsElt = document.getElementById('fps');
+        setInterval(function () {
+            fpsElt.innerHTML = (1000 / averageFrameTime).toFixed(1) + ' fps';
+        }, 1000);
     }
 
     init();
