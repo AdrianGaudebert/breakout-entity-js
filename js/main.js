@@ -6,7 +6,6 @@ requirejs.config({
 });
 
 require([
-    'lib/pixi',
     'lib/sat',
     'vendor/entity-system-js/entity-manager',
     'vendor/entity-system-js/processor-manager',
@@ -18,7 +17,6 @@ require([
     'processors/collision-processor',
     'processors/moving-processor'
 ], function (
-    PIXI,
     SAT,
     EntityManager,
     ProcessorManager,
@@ -30,11 +28,6 @@ require([
     CollisionProcessor,
     MovingProcessor
 ) {
-    // Creation of the stage with PIXI.
-    var stage = new PIXI.Stage(0x888888);
-    var renderer = PIXI.autoDetectRenderer(640, 480);
-    document.getElementById('stage').appendChild(renderer.view);
-
     function init() {
         // Loading of the components.
         var manager = new EntityManager();
@@ -47,7 +40,7 @@ require([
         var processors = new ProcessorManager();
         processors.addProcessor(new MovingProcessor(manager));
         processors.addProcessor(new CollisionProcessor(manager));
-        processors.addProcessor(new RenderingProcessor(manager, renderer, stage));
+        processors.addProcessor(new RenderingProcessor(manager));
 
         // Creation of the base entities.
         var background = manager.createEntity(['Sprite', 'BoundingBox']);

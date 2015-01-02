@@ -1,10 +1,13 @@
 define([
 'lib/pixi',
 ], function (PIXI) {
-    var RenderingProcessor = function (manager, renderer, stage) {
+    var RenderingProcessor = function (manager) {
         this.manager = manager;
-        this.renderer = renderer;
-        this.stage = stage;
+
+        // Creation of the stage with PIXI.
+        this.stage = new PIXI.Stage(0x888888);
+        this.renderer = PIXI.autoDetectRenderer(640, 480);
+        document.getElementById('stage').appendChild(this.renderer.view);
 
         // A dictionary associating entities with their respective sprite.
         // entity id -> sprite
