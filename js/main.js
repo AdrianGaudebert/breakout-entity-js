@@ -6,24 +6,28 @@ requirejs.config({
 });
 
 require([
-    'lib/sat',
     'vendor/entity-system-js/entity-manager',
     'vendor/entity-system-js/processor-manager',
+
     'components/ball',
+    'components/brick',
     'components/sprite',
     'components/bounding-box',
     'components/moving',
+
     'processors/rendering-processor',
     'processors/collision-processor',
     'processors/moving-processor'
 ], function (
-    SAT,
     EntityManager,
     ProcessorManager,
+
     Ball,
+    Brick,
     Sprite,
     BoundingBox,
     Moving,
+
     RenderingProcessor,
     CollisionProcessor,
     MovingProcessor
@@ -31,12 +35,21 @@ require([
     function init() {
         // Loading of the components.
         var manager = new EntityManager();
-        manager.addComponent(Ball.name, Ball);
-        manager.addComponent(Sprite.name, Sprite);
-        manager.addComponent(BoundingBox.name, BoundingBox);
-        manager.addComponent(Moving.name, Moving);
+
+        // Add all components to the system.
+        var components = [
+            Ball,
+            Brick,
+            Sprite,
+            BoundingBox,
+            Moving,
+        ];
+        for (var i = components.length - 1; i >= 0; i--) {
+            manager.addComponent(components[i].name, components[i]);
+        }
 
         // Loading of the processors.
+        // Note: order matters! Rendering should always be last.
         var processors = new ProcessorManager();
         processors.addProcessor(new MovingProcessor(manager));
         processors.addProcessor(new CollisionProcessor(manager));
@@ -56,6 +69,16 @@ require([
         ballBoundingBox.y = 0;
         ballBoundingBox.width = 16;
         ballBoundingBox.height = 16;
+
+        var brick = manager.createEntity(['Brick', 'Sprite', 'BoundingBox']);
+        var brickSpriteData = manager.getEntityWithComponent(brick, 'Sprite');
+        brickSpriteData.source = 'img/brick.png';
+
+        var brickBox = manager.getEntityWithComponent(brick, 'BoundingBox');
+        brickBox.x = 640 / 2 - 24;
+        brickBox.y = 200;
+        brickBox.width = 48;
+        brickBox.height = 16;
 
         var walls = [
             { x: 0, y: -20, width: 640, height: 20 },
