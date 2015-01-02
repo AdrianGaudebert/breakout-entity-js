@@ -9,25 +9,12 @@ define(function () {
         var destY;
 
         var balls = this.manager.getEntitiesWithComponent('Ball');
-        var walls = this.manager.getEntitiesWithComponent('Wall');
 
         for (var b in balls) {
             ball = balls[b];
 
             destX = ball.x + (ball.dx * ball.speed);
             destY = ball.y + (ball.dy * ball.speed);
-
-            // Check collisions with walls.
-            for (var w in walls) {
-                var wall = walls[w];
-
-                if (this.circleRectangleCollide(ball, wall)) {
-                    var bouncing = this.bounces(ball, wall);
-                    if (bouncing.bounce) {
-                        console.log('BOUNCING ON THE WALLS');
-                    }
-                }
-            }
 
             ball.x = destX;
             ball.y = destY;
