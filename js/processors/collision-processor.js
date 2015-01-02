@@ -46,6 +46,9 @@ define(['lib/sat'], function (SAT) {
                     if (areColliding) {
                         movingData = movables[movableId];
 
+                        movableBoxData.x = movableBoxData.x - collisionResponse.overlapV.x;
+                        movableBoxData.y = movableBoxData.y - collisionResponse.overlapV.y;
+
                         if (collisionResponse.overlapN.x !== 0) {
                             movingData.dx = movingData.dx * -1;
                         }
