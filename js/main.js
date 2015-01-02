@@ -14,7 +14,6 @@ require([
     'components/bounding-box',
     'components/moving',
     'processors/rendering-processor',
-    'processors/physics-processor',
     'processors/collision-processor',
     'processors/moving-processor'
 ], function (
@@ -26,7 +25,6 @@ require([
     BoundingBox,
     Moving,
     RenderingProcessor,
-    PhysicsProcessor,
     CollisionProcessor,
     MovingProcessor
 ) {
@@ -45,7 +43,6 @@ require([
 
         // Loading of the processors.
         var processors = new ProcessorManager();
-        // processors.addProcessor(new PhysicsProcessor(manager));
         processors.addProcessor(new MovingProcessor(manager));
         processors.addProcessor(new CollisionProcessor(manager));
         processors.addProcessor(new RenderingProcessor(manager, renderer, stage));
