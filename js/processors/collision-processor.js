@@ -9,6 +9,7 @@ define(function () {
         var element = null;
         var boudingBoxElement = null;
         var areColliding = null;
+        var movingElement = null;
 
         for (var movable in movables) {
             element = this.manager.getEntityWithComponent(movable, 'BoundingBox');
@@ -20,7 +21,9 @@ define(function () {
                     areColliding = this.areColliding(element, boudingBoxElement);
 
                     if (areColliding) {
-                        console.log("colliding");
+                        var movingElement = this.manager.getEntityWithComponent(movable, "Moving");
+                        movingElement.dy = movingElement.dy * -1;
+                        movingElement.dx = movingElement.dx * -1;
                     }
                 }
             }
@@ -36,6 +39,10 @@ define(function () {
         }
 
         return false;
+    };
+
+    CollisionsProcessor.prototype.collisionsHandler = function () {
+
     };
 
     return CollisionsProcessor;

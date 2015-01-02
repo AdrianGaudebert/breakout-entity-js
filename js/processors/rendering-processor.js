@@ -22,7 +22,7 @@ define([
                 this.createSprite(spriteData)
             }
 
-            var posData = this.manager.getEntityWithComponent(id, 'Ball');
+            var posData = this.manager.getEntityWithComponent(id, 'BoundingBox');
 
             this._sprites[id].x = posData.x;
             this._sprites[id].y = posData.y;
@@ -34,8 +34,6 @@ define([
     RenderingProcessor.prototype.createSprite = function (spriteData) {
         var texture = PIXI.Texture.fromImage(spriteData.source);
         var sprite = new PIXI.Sprite(texture);
-        sprite.anchor.x = 0.5;
-        sprite.anchor.y = 0.5;
 
         this.stage.addChild(sprite);
         this._sprites[spriteData.__id] = sprite;
