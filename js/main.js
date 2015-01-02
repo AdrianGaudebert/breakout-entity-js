@@ -11,18 +11,22 @@ require([
     'vendor/entity-system-js/processor-manager',
     'components/ball',
     'components/sprite',
-    'components/wall',
+    'components/bounding-box',
+    'components/moving',
     'processors/rendering-processor',
-    'processors/physics-processor'
+    'processors/physics-processor',
+    'processors/collision-processor'
 ], function (
     PIXI,
     EntityManager,
     ProcessorManager,
     Ball,
     Sprite,
-    Wall,
+    BoundingBox,
+    Moving,
     RenderingProcessor,
-    PhysicsProcessor
+    PhysicsProcessor,
+    collisionProcessor
 ) {
     // Creation of the stage with PIXI.
     var stage = new PIXI.Stage(0x888888);
@@ -33,8 +37,9 @@ require([
         // Loading of the components.
         var manager = new EntityManager();
         manager.addComponent(Ball.name, Ball);
-        manager.addComponent(Wall.name, Wall);
         manager.addComponent(Sprite.name, Sprite);
+        manager.addComponent(BoundingBox.name, BoundingBox);
+        manager.addComponent(Moving.name, Moving);
 
         // Loading of the processors.
         var processors = new ProcessorManager();
@@ -42,23 +47,30 @@ require([
         processors.addProcessor(new RenderingProcessor(manager, renderer, stage));
 
         // Creation of the base entities.
-        var ball = manager.createEntity(['Ball', 'Sprite']);
+        var ball = manager.createEntity(['Ball', 'Sprite', 'Moving', 'BoundingBox']);
         var spriteData = manager.getEntityWithComponent(ball, 'Sprite');
         spriteData.source = 'img/ball.png';
 
         var ballData = manager.getEntityWithComponent(ball, 'Ball');
         ballData.x = 640 / 2;
-        ballData.y = 50;
+        ballData.y = 5;
+
+        var ballBoudingBox = manager.getEntityWithComponent(ball, 'BoundingBox');
+        ballBoudingBox.x = 640 / 2;
+        ballBoudingBox.y = 0;
+        ballBoudingBox.width = 20;
+        ballBoudingBox.height = 20;
 
         var walls = [
-            { x: 0, y: -20, width: 640, height: 20 },
-            { x: 640, y: 480, width: 640, height: 20 },
+            { x: 0, y: 0, width: 640, height: 20 },
+            { x: 640, y: 40, width: 640, height: 20 },
             { x: -20, y: 0, width: 20, height: 480 },
-            { x: 640, y: 0, width: 20, height: 480 },
+            { x: 640, y: 0, width: 20, height: 480 }
         ];
+
         for (var i = walls.length - 1; i >= 0; i--) {
-            var wall = manager.createEntity(['Wall']);
-            var wallData = manager.getEntityWithComponent(wall, 'Wall');
+            var wall = manager.createEntity(['BoundingBox']);
+            var wallData = manager.getEntityWithComponent(wall, 'BoundingBox');
             wallData.x = walls[i].x;
             wallData.y = walls[i].y;
             wallData.width = walls[i].width;
