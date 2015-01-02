@@ -14,43 +14,44 @@ define(['lib/sat'], function (SAT) {
     CollisionsProcessor.prototype.update = function () {
         var movables = this.manager.getEntitiesWithComponent('Moving');
         var boundingBoxes = this.manager.getEntitiesWithComponent('BoundingBox');
-        var element = null;
         var boundingBoxData = null;
         var areColliding = null;
         var movingElementData = null;
         var satElement = null;
         var collisionResponse = new SAT.Response();
-        var boudingBoxId = null;
 
         for (var movableId in movables) {
-            element = this.manager.getEntityWithComponent(movableId, 'BoundingBox');
-            satElement = new SAT.Box(new SAT.Vector(element.x,element.y), element.width, element.height).toPolygon();
+            var movableBoxData = this.manager.getEntityWithComponent(movableId, 'BoundingBox');
+            satElement = new SAT.Box(
+                new SAT.Vector(movableBoxData.x, movableBoxData.y), 
+                movableBoxData.width, 
+                movableBoxData.height
+            ).toPolygon();
 
-            for (var boudingBoxId in boundingBoxes) {
-                boundingBoxData = this.manager.getEntityWithComponent(boudingBoxId, 'BoundingBox');
+            for (var id in boundingBoxes) {
+                boundingBoxData = this.manager.getEntityWithComponent(id, 'BoundingBox');
 
-                if (boundingBoxData.__id !== element.__id) {
+                if (id !== movableId) {
 
-                    if (!this._boxes[boundingBoxData.__id]) {
-                        this._boxes[boundingBoxData.__id] = new SAT.Box(
+                    if (!this._boxes[id]) {
+                        this._boxes[id] = new SAT.Box(
                             new SAT.Vector(boundingBoxData.x, boundingBoxData.y),
                             boundingBoxData.width, 
                             boundingBoxData.height
                         ).toPolygon();
                     }
 
-                    var areColliding = SAT.testPolygonPolygon(satElement, this._boxes[boundingBoxData.__id], collisionResponse);
+                    var areColliding = SAT.testPolygonPolygon(satElement, this._boxes[id], collisionResponse);
 
                     if (areColliding) {
-                        movingElementData = this.manager.getEntityWithComponent(movableId, 'Moving');
+                        movingData = movables[movableId];
 
                         if (collisionResponse.overlapN.x !== 0) {
-                            debugger;
-                            movingElementData.dx = movingElementData.dx * collisionResponse.overlapN.x;
+                            movingData.dx = movingData.dx * -1;
                         }
 
                         if (collisionResponse.overlapN.y !== 0) {
-                            movingElementData.dy = movingElementData.dy * collisionResponse.overlapN.y;
+                            movingData.dy = movingData.dy * -1;
                         }
 
                         collisionResponse.clear();

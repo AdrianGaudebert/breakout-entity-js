@@ -58,11 +58,11 @@ require([
         var spriteData = manager.getEntityWithComponent(ball, 'Sprite');
         spriteData.source = 'img/ball.png';
 
-        var ballBoudingBox = manager.getEntityWithComponent(ball, 'BoundingBox');
-        ballBoudingBox.x = 640 / 2;
-        ballBoudingBox.y = 0;
-        ballBoudingBox.width = 20;
-        ballBoudingBox.height = 20;
+        var ballBoundingBox = manager.getEntityWithComponent(ball, 'BoundingBox');
+        ballBoundingBox.x = 640 / 2;
+        ballBoundingBox.y = 0;
+        ballBoundingBox.width = 16;
+        ballBoundingBox.height = 16;
 
         var walls = [
             { x: 0, y: -20, width: 640, height: 20 },
